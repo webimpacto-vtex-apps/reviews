@@ -1,0 +1,48 @@
+{
+  "vendor": "vtex",
+  "name": "review-app-example",
+  "version": "0.0.1",
+  "title": "Review App Example",
+  "description": "Example app of a review app in the platform.",
+  "builders": {
+    "messages": "1.x",
+    "store": "0.x",
+    "react": "3.x",
+    "node": "4.x",
+    "graphql": "1.x"
+  },
+  "mustUpdateAt": "2019-04-02",
+  "scripts": {
+    "postreleasy": "vtex publish --verbose"
+  },
+  "dependencies": {
+    "vtex.product-review-interfaces": "1.x",
+    "vtex.product-summary": "2.x",
+    "vtex.product-context": "0.x",
+    "vtex.store": "2.x",
+    "vtex.store-graphql": "2.x"
+  },
+  "settingsSchema": {
+    "title": "Product Review Example",
+    "type": "object",
+    "properties": {
+      "storeId": {
+        "title": "Store ID",
+        "description": "Enter your Store ID",
+        "type": "string"
+      },
+      "productBinding": {
+        "title": "Product Reference",
+        "type": "string",
+        "default": "productId",
+        "enum": [
+          "productId",
+          "refId",
+          "skuId",
+          "slug"
+        ]
+      }
+    }
+  },
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
+}

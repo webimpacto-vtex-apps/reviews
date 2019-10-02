@@ -1,0 +1,10 @@
+query{
+  documents(acronym:"RE", fields:"productId", where: "productId=1", page: 1){
+    cacheId,
+    id,
+    fields {
+      key
+      value
+    }
+  }
+}
