@@ -1,5 +1,17 @@
 {
   "store.product-review-form": {
     "blocks": ["product-review-form.example-review"]
+  },
+  "store.product": {
+    "blocks": [
+      "product-reviews",
+      "product-rating-summary",
+      "product-questions-and-answers"
+    ]
+  },
+  "product-summary.shelf": {
+    "children": [
+      "product-rating-inline"
+    ]
   }
 }

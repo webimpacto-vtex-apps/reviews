@@ -1,7 +1,12 @@
 import { ClientsConfig, LRUCache, Service, IOClients, ServiceContext } from '@vtex/api'
 import { Clients } from './clients'
 
-import settingsResolver from './resolvers/settings'
+//import settingsResolver from './resolvers/settings'
+//import { saveReviewSummary } from './resolvers/reviews'
+//import { review } from './resolvers/review'
+import { newReview } from './resolvers/newReview'
+import { productReviews } from './resolvers/productReviews'
+//import {  } from './resolvers/'
 
 const TIMEOUT_MS = 800
 
@@ -37,8 +42,12 @@ export default new Service<IOClients>({
   clients,
   graphql: {
     resolvers: {
+      Mutation: {
+        newReview
+      },
       Query: {
-        appSettings: settingsResolver,
+        productReviews
+        //,profile(customFields: String): Profile
       }
     },
   },

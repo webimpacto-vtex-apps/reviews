@@ -1,5 +1,39 @@
+type Review {
+  approved: Boolean
+  comment: String
+  locale: String!
+  name: String
+  productId: Int!
+  score: Float!
+}
+
+input ReviewInput {
+  comment: String
+  locale: String
+  name: String
+  productId: Int
+  score: Float
+}
+
 type Query {
   appSettings: Settings @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+
+  productReviews(productId: Int!, locale: String, appSettings: Boolean): [Review] # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+  #profile(
+    #customFields: String
+  #): Profile @cacheControl(scope: PRIVATE) @withCurrentProfile
+
+  #getReviews(productId: String): String 
+  #isUserLogged: boolean
+  #getProductReviewList(productId: String): [Review]
+  #getProductReviewListByLang(productId: String, idLang: String): [Review]
+  #addProductReview(review: Review): boolean
+  #validateReview(idReview: String): boolean
+  #getProductReviewOverall(productId: String): Array
+}
+
+type Mutation {
+  newReview(review:ReviewInput!):Review
 }
 
 type Settings {

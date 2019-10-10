@@ -4,6 +4,7 @@ import { ProductContext } from 'vtex.product-context'
 import { Settings } from './components/withSettings'
 import withReviews from './components/withReviews'
 import { DataProps } from 'react-apollo'
+import ReviewForm from './ReviewForm'
 
 const Reviews: FunctionComponent<Partial<DataProps<Settings>>> = (props) => {
   console.log(props)
@@ -24,6 +25,8 @@ const Reviews: FunctionComponent<Partial<DataProps<Settings>>> = (props) => {
           }}
         />
       </div>
+      <ReviewForm/>
+      <span>DEJAR UN COMENTARIO</span>>
     </div>
   )
 }
