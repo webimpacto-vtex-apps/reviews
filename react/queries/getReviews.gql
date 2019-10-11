@@ -1,0 +1,10 @@
+query{
+    productReviews(productId: 1){
+      approved
+      comment
+      locale
+      name
+      productId
+      score
+    }
+  }

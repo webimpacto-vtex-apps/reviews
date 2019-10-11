@@ -1,6 +1,7 @@
 import { Review} from './../typings/custom'
 import axios from 'axios'
 
+
 interface Args {
     productId: Number,
     locale: String,
@@ -8,6 +9,7 @@ interface Args {
 }
 
 export async function productReviews(_root: any, args: Args, ctx: any) {
+    console.log("INICIO PRODUCTREVIEWS.TS")
     let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=approved,comment,locale,name,productId,score&_where=productId=` + args["productId"] + ` AND approved=`+ args["approved"];
     if(typeof args['locale'] != "undefined"){
         URL += ` AND locale=`+ args["locale"];
@@ -18,9 +20,13 @@ export async function productReviews(_root: any, args: Args, ctx: any) {
         URL += ` AND approved=false`;
     }
 
+    console.log(ctx.cookies)
+
+    return ['null']
+
     let response = await axios({
         headers: {
-            'VtexIdclientAutCookie': ctx.cookies.get('VtexIdclientAutCookie'),
+            //'VtexIdclientAutCookie': ctx.vtex.authToken,
             'Proxy-Authorization': ctx.vtex.authToken,
         },
         method: 'GET',
