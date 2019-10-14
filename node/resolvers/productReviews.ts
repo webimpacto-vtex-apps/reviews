@@ -11,6 +11,7 @@ interface Args {
 export async function productReviews(_root: any, args: Args, ctx: any) {
     console.log("INICIO PRODUCTREVIEWS.TS")
     let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=approved,comment,locale,name,productId,score&_where=productId=` + args["productId"] + ` AND approved=`+ args["approved"];
+    //let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=approved,productId,score&_where=productId=` + args["productId"] + ` AND approved=`+ args["approved"];
     if(typeof args['locale'] != "undefined"){
         URL += ` AND locale=`+ args["locale"];
     }
@@ -20,13 +21,13 @@ export async function productReviews(_root: any, args: Args, ctx: any) {
         URL += ` AND approved=false`;
     }
 
-    console.log(ctx.cookies)
+    //console.log(ctx.cookies)
 
-    return ['null']
+    //return ['null']
 
     let response = await axios({
         headers: {
-            //'VtexIdclientAutCookie': ctx.vtex.authToken,
+            'VtexIdclientAutCookie': ctx.vtex.authToken,
             'Proxy-Authorization': ctx.vtex.authToken,
         },
         method: 'GET',
