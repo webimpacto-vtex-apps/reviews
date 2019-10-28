@@ -1,0 +1,10 @@
+{
+    "admin.app.admin-reviews": {
+      "component": "AdminReviews",
+      "path": "/admin/app/admin-reviews"
+    },
+    "admin.app.admin-reviews-detail": {
+      "component": "AdminReview",
+      "path": "/admin/app/admin-reviews/:reviewId"
+    }
+  }

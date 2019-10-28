@@ -4,9 +4,11 @@ import { Clients } from './clients'
 //import settingsResolver from './resolvers/settings'
 //import { saveReviewSummary } from './resolvers/reviews'
 //import { review } from './resolvers/review'
-import { newReview } from './resolvers/newReview'
+//import { newReview } from './resolvers/newReview'
+import { saveReview } from './resolvers/saveReview'
 import { productReviews } from './resolvers/productReviews'
-//import {  } from './resolvers/'
+import { adminReviews } from './resolvers/adminReviews'
+import { adminReview } from './resolvers/adminReview'
 
 const TIMEOUT_MS = 800
 
@@ -43,10 +45,13 @@ export default new Service<IOClients>({
   graphql: {
     resolvers: {
       Mutation: {
-        newReview
+        //newReview,
+        saveReview
       },
       Query: {
-        productReviews
+        productReviews,
+        adminReviews,
+        adminReview
         //,profile(customFields: String): Profile
       }
     },

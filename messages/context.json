@@ -1,7 +1,10 @@
 {
+  "admin-reviews.navigation.label": "Administrar reviews",
   "qna": "Questions and answers",
   "stars": "Stars",
   "rating-summary": "Rating summary",
   "review-form": "Review form",
-  "reviews": "Reviews"
+  "reviews": "Reviews",
+  "dejar-comentario":"Write your opinion",
+  "Button-addReview": "Guardar review"
 }

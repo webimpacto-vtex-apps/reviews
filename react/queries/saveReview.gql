@@ -1,0 +1,5 @@
+mutation saveReview($review: ReviewInput!){
+  saveReview(review: $review){
+    reviewId
+  }
+}

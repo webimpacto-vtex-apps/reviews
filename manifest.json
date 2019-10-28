@@ -9,6 +9,7 @@
     "store": "0.x",
     "react": "3.x",
     "node": "4.x",
+    "admin": "0.x",
     "graphql": "1.x"
   },
   "mustUpdateAt": "2019-04-02",
@@ -20,7 +21,8 @@
     "vtex.product-summary": "2.x",
     "vtex.product-context": "0.x",
     "vtex.store": "2.x",
-    "vtex.store-graphql": "2.x"
+    "vtex.store-graphql": "2.x",
+    "vtex.admin": "1.x"
   },
   "settingsSchema": {
     "title": "Product Review Example",

@@ -9,10 +9,10 @@ interface Args {
 }
 
 export async function productReviews(_root: any, args: Args, ctx: any) {
-    console.log("INICIO PRODUCTREVIEWS.TS")
-    let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=approved,comment,locale,name,productId,score&_where=productId=` + args["productId"] + ` AND approved=`+ args["approved"];
-    //let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=approved,productId,score&_where=productId=` + args["productId"] + ` AND approved=`+ args["approved"];
-    if(typeof args['locale'] != "undefined"){
+    let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=approved,comment,locale,name,productId,score&_where=productId=` + args["productId"];
+    //let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=approved,comment,locale,name,productId,score&_where=productId=` + args["productId"] + ` AND approved=`+ args["approved"];
+    
+    if(typeof args['locale'] != "undefined" && args['locale'] != ''){
         URL += ` AND locale=`+ args["locale"];
     }
     if(typeof args['approved'] != "undefined" && args['approved'] == true){
@@ -20,10 +20,6 @@ export async function productReviews(_root: any, args: Args, ctx: any) {
     }else if(typeof args['approved'] != "undefined" && args['approved'] == false){
         URL += ` AND approved=false`;
     }
-
-    //console.log(ctx.cookies)
-
-    //return ['null']
 
     let response = await axios({
         headers: {

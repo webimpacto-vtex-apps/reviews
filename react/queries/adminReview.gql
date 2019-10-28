@@ -1,0 +1,11 @@
+query adminReview($reviewId: Int){
+  adminReview(reviewId: $reviewId){
+    reviewId
+    approved
+    comment
+    locale
+    name
+    productId
+    score
+  }
+}

@@ -1,34 +1,31 @@
-import React, { FunctionComponent, useContext } from 'react'
-import { FormattedMessage } from 'react-intl'
+import React, { FunctionComponent, useContext , useState } from 'react'
 import { ProductContext } from 'vtex.product-context'
 import { Settings } from './components/withSettings'
-import withReviews from './components/withReviews'
 import { DataProps } from 'react-apollo'
-import ReviewForm from './ReviewForm'
+import ReviewsContent from './ReviewsContent'
+import { withRuntimeContext } from 'vtex.render-runtime'
 
-const Reviews: FunctionComponent<Partial<DataProps<Settings>>> = (props) => {
-  console.log(props)
+const Reviews: FunctionComponent<Partial<DataProps<Settings>>> = (props: any) => {
   const { product } = useContext(ProductContext)
+
+  const [locale, setLocale] = useState(props.runtime.culture.locale);
+
+  function handleChangeLocale (event:any) {
+    setLocale(event.target.value)
+  }
 
   if (!product) {
     return null
   }
-
   return (
-    <div className="flex justify-center">
-      <div className="w-100 ph3 ph5-m ph2-xl mw9">
-        Reviewwws.tsx
-      <FormattedMessage
-          id="reviews"
-          values={{
-            name: product.productName,
-          }}
-        />
-      </div>
-      <ReviewForm/>
-      <span>DEJAR UN COMENTARIO</span>>
+    <div>
+      <select onChange={handleChangeLocale}>
+        <option value={props.runtime.culture.locale}>{props.runtime.culture.locale}</option>
+        <option value={''}>All langs</option>
+      </select>
+      <ReviewsContent data-producto={product.productId} data-locale={locale} />
     </div>
   )
 }
 
-export default withReviews(Reviews)
+export default (withRuntimeContext(Reviews))

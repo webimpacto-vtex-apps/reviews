@@ -1,4 +1,4 @@
-import { ReviewInput } from '../typings/custom'
+/*import { ReviewInput } from '../typings/custom'
 import axios from 'axios'
 
 
@@ -21,6 +21,7 @@ export async function newReview(_root: any, args: Args, ctx:any) {
             name : args['review'].name,
             productId : args['review'].productId,
             score : args['review'].score,
+            approved: false
         }
     }).then(function () {
         //console.log(response.data);
@@ -31,4 +32,4 @@ export async function newReview(_root: any, args: Args, ctx:any) {
         console.log(error);
     });
     return response;
-}
+}*/

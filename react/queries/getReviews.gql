@@ -1,5 +1,5 @@
-query productReviews($productId: Int!){
-  productReviews(productId: $productId){
+query productReviews($productId: Int!, $approved: Boolean, $locale: String){
+  productReviews(productId: $productId, approved: $approved, locale: $locale){
     approved
     comment
     locale

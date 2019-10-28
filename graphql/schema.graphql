@@ -1,4 +1,5 @@
 type Review {
+  reviewId: Int
   approved: Boolean
   comment: String
   locale: String!
@@ -8,6 +9,8 @@ type Review {
 }
 
 input ReviewInput {
+  reviewId: Int
+  approved: Boolean
   comment: String
   locale: String
   name: String
@@ -18,7 +21,9 @@ input ReviewInput {
 type Query {
   appSettings: Settings @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
 
-  productReviews(productId: Int!, locale: String, appSettings: Boolean): [Review] # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+  productReviews(productId: Int!, approved: Boolean ,locale: String, appSettings: Boolean): [Review] # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+  adminReviews(productId: Int, from: Int, to: Int, locale: String): [Review] # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+  adminReview(reviewId: Int): Review # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   #profile(
     #customFields: String
   #): Profile @cacheControl(scope: PRIVATE) @withCurrentProfile
@@ -33,7 +38,8 @@ type Query {
 }
 
 type Mutation {
-  newReview(review:ReviewInput!):Review
+  #newReview(review:ReviewInput!):Review
+  saveReview(review:ReviewInput!):Review
 }
 
 type Settings {

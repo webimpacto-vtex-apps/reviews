@@ -8,7 +8,7 @@ const RatingInline: FunctionComponent = () => {
   return (
     <div title={product.name}>
        RATING INLINE
-      <Stars rating={4} />
+      <Stars rating={2} />
     </div>
   )
 }

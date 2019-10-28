@@ -1,7 +1,10 @@
 {
+  "admin-reviews.navigation.label": "Administrar reviews",
   "qna": "Perguntas e respostas para {name}",
   "stars": "Estrelas para {name}",
   "rating-summary": "Resumo das avaliações para {name}",
   "review-form": "Formulário de avaliação",
-  "reviews": "Mostre as avaliações de {name} aqui"
+  "reviews": "Mostre as avaliações de {name} aqui",
+  "dejar-comentario":"Escribir opinión de este producto",
+  "Button-addReview": "Guardar review"
 }

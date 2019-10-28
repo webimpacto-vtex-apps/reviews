@@ -4,13 +4,44 @@
 .star--filled {}
 .star--empty {}
 
-
+.reviewForm-background{
+    background: #666;
+    opacity: 0.6;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+}
 .review-form-container {
-    position: absolute;
+    position: fixed;
     background: white;
-    display:none;
+    border: 2px solid blue;
     width: 600px;
-    height: 600px;
     top: 100px;
-    left: calc(50% -300px);
+    left: calc(50% - 300px);
+    z-index: 10000;
+    padding: 20px;
+}
+
+.review-form-container>div {
+    margin-top: 5px; 
+    margin-bottom: 5px;
+}
+
+.reviewProgressBarContainer{
+    background-color: #DDD;
+    position: relative;
+    height: 10px;
+    border-radius: 5px;
+    width: 100%;
+}
+.reviewProgressBar{
+    position: absolute;
+    background-color:chartreuse;
+    height: 100%;
+    border-radius: 5px;
+    top: 0;
+    left: 0;
 }

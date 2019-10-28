@@ -1,4 +1,6 @@
-import reviews from '../graphql/getReviews.graphql'
+//import reviews from '../graphql/getReviews.graphql'
+
+import reviews from './../queries/getReviews.gql'
 import { graphql } from 'react-apollo'
 
 export interface Settings {
@@ -6,6 +8,7 @@ export interface Settings {
   productBinding: string
 }
 
-const withReviews = graphql<{}, Settings>(reviews)
-
+const withReviews = graphql<{}, Settings>(reviews,{
+  options: () => ({ variables: { productId: 1111 } })
+})
 export default withReviews

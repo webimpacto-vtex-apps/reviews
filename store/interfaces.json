@@ -6,7 +6,7 @@
     "component": "Reviews"
   },
   "product-rating-summary.example-review": {
-    "component": "RatingSummary"
+    "component": "RatingSummaryTop"
   },
   "product-rating-inline.example-review": {
     "component": "RatingInline"

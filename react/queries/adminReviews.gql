@@ -1,0 +1,11 @@
+query adminReviews($productId: Int, $from: Int, $to: Int, $locale: String){
+  adminReviews(productId: $productId, from: $from, to: $to, locale: $locale){
+    reviewId
+    approved
+    comment
+    locale
+    name 
+    productId
+    score
+  }
+}
