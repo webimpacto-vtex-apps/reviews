@@ -1,8 +1,8 @@
-
 import React, { FunctionComponent, useState} from 'react'
 //import { FormattedMessage } from 'react-intl'
 import adminReviewQuery from './queries/adminReview.gql'
 import saveReview from './queries/saveReview.gql'
+//import getReviews from './queries/getReviews.gql'
 import { graphql } from 'react-apollo'
 import Rating, { RatingComponentProps } from 'react-rating'
 import fontAwesome from 'font-awesome/css/font-awesome.min.css'
@@ -25,7 +25,7 @@ const AdminReview: VtexFunctionComponent = (props: any) => {
   const { colorStars, starsType } = props
   const [reviewApproved, setReviewApproved] = useState(review.approved);
   const handleApprovedClick = () => {
-    setReviewApproved(!reviewApproved)
+    setReviewApproved(!reviewApproved);
     updateApproved();
   }
   let ratingDynamicProps:RatingComponentProps = {}
@@ -44,17 +44,35 @@ const AdminReview: VtexFunctionComponent = (props: any) => {
     ratingDynamicProps.fullSymbol = `${styles.star} ${styles['star--filled']} ${fontAwesome.fa} ${fontAwesome['fa-star']}`
   }
 
+  /*let reviewObj:ReviewInput={
+    approved: true,
+    productId: props.data.adminReview.productId
+  };*/
+  /*let variables = {
+    review: reviewObj
+  }*/
+  /*props.getReviews({ variables: { 
+    approved: true,
+    productId: props.data.adminReview.productId
+  }})*/
+  /*props.getReviews({variables}).then((data:any) => {
+    console.log("-----------------")
+    console.log(data)
+  });*/    
+
+
+
+
   function updateApproved(){
       let reviewObj:ReviewInput={
         reviewId: props.params.reviewId,
-        approved: reviewApproved
-      };    
-      console.log(reviewObj);
+        approved: !reviewApproved,
+        id: props.data.adminReview.id
+      };
       let variables = {
         review: reviewObj
       }
       props.saveReview( {variables} ).then((data:any) => {
-        console.log("DATA")
         console.log(data)
       });    
   }
@@ -109,7 +127,15 @@ export default compose(
       }})
     }
   }),
-  
+  /*graphql(getReviews, {
+    options: (props:any) => {
+      return ({ variables: { 
+        reviewId: props.params.reviewId,
+        approved: true
+      }})
+    }
+  }),*/
+  //graphql(getReviews, {name: 'getReviews'}),
   graphql(saveReview, {name: 'saveReview'})/*,
   graphql(saveReview, {
     options: (props:any) => {

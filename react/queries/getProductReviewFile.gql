@@ -1,0 +1,6 @@
+query getProductReviewFile($id: Int!){
+  getProductReviewFile(id: $id){
+    cont
+    average
+  }
+}

@@ -7,5 +7,6 @@ query adminReviews($productId: Int, $from: Int, $to: Int, $locale: String){
     name 
     productId
     score
+    id
   }
 }

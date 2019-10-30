@@ -7,7 +7,7 @@ export interface Settings {
   storeId: string
   productBinding: string
 }
-
+console.log("AQUI NO DEBERÍA ESTAR")
 const withReviews = graphql<{}, Settings>(reviews,{
   options: () => ({ variables: { productId: 1111 } })
 })

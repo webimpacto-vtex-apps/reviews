@@ -7,5 +7,6 @@ query adminReview($reviewId: Int){
     name
     productId
     score
+    id
   }
 }

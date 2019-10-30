@@ -34,13 +34,13 @@ export async function productReviews(_root: any, args: Args, ctx: any) {
         // Filter by lang if necessary
         if(typeof args['locale'] == "undefined"){
             return listado;
-        }    
+        }
         let listadoFiltradoPorLenguaje = listado.filter(function(review:Review){
             return review['locale'] == args['locale']
-        })    
+        })
         return listadoFiltradoPorLenguaje;
     }).catch(function (error) {
-        console.log("ERROR"); 
+        console.log("ERROR");
         console.log(error);
     });
 

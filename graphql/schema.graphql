@@ -6,6 +6,12 @@ type Review {
   name: String
   productId: Int!
   score: Float!
+  id: String
+}
+
+type ProductReviewFile{
+  cont: Int
+  average: Float
 }
 
 input ReviewInput {
@@ -16,6 +22,7 @@ input ReviewInput {
   name: String
   productId: Int
   score: Float
+  id: String
 }
 
 type Query {
@@ -24,6 +31,7 @@ type Query {
   productReviews(productId: Int!, approved: Boolean ,locale: String, appSettings: Boolean): [Review] # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   adminReviews(productId: Int, from: Int, to: Int, locale: String): [Review] # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   adminReview(reviewId: Int): Review # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+  getProductReviewFile(id: Int): ProductReviewFile # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   #profile(
     #customFields: String
   #): Profile @cacheControl(scope: PRIVATE) @withCurrentProfile
@@ -38,7 +46,6 @@ type Query {
 }
 
 type Mutation {
-  #newReview(review:ReviewInput!):Review
   saveReview(review:ReviewInput!):Review
 }
 

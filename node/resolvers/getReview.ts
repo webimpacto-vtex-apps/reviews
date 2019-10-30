@@ -1,12 +1,12 @@
-import { Review} from './../typings/custom'
+import { Review} from '../typings/custom'
 import axios from 'axios'
 
 interface Args {
-    reviewId: Number
+    id: String
 }
 
-export async function review(_root: any, args: Args, ctx: any) {
-    let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=id,approved,comment,locale,name,productId,score&_where=id=` + args["reviewId"] ;
+export async function getReview(_root: any, args: Args, ctx: any) {
+    let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=id,approved,comment,locale,name,productId,score&_where=id=` + args["id"] ;
 
     let response = await axios({
         headers: {
@@ -28,9 +28,7 @@ export async function review(_root: any, args: Args, ctx: any) {
         //return listadoFiltradoPorLenguaje;
         return listado.filter(function(review:Review){
             return review;
-        })    
-        //return listadoFiltradoPorLenguaje;
-        //return response as Review;
+        });
     }).catch(function (error) {
         console.log("ERROR"); 
         console.log(error);

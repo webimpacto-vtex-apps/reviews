@@ -6,7 +6,7 @@ interface Args {
 }
 
 export async function adminReview(_root: any, args: Args, ctx: any) {
-    let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=reviewId,approved,comment,locale,name,productId,score&_where=reviewId=` +args["reviewId"] ;
+    let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=id,reviewId,approved,comment,locale,name,productId,score&_where=reviewId=` +args["reviewId"] ;
    
     let response = await axios({
         headers: {

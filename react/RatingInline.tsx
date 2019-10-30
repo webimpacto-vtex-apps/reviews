@@ -1,15 +1,12 @@
 import React, { useContext, FunctionComponent } from 'react'
 import { ProductSummaryContext } from 'vtex.product-summary'
-import Stars from './components/Stars'
+import RatingInlineContent from './RatingInlineContent'
 
 const RatingInline: FunctionComponent = () => {
   const { product } = useContext(ProductSummaryContext)
 
   return (
-    <div title={product.name}>
-       RATING INLINE
-      <Stars rating={2} />
-    </div>
+    <RatingInlineContent data-product={product}/>
   )
 }
 

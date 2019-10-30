@@ -12,7 +12,7 @@ interface Args {
 export async function adminReviews(_root: any, args: Args, ctx: any) {
     const pageItems = 10;
 
-    let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=reviewId,approved,comment,locale,name,productId,score&_where=` ;
+    let URL = `http://${ctx.vtex.account}.myvtex.com/api/dataentities/RE/search?_fields=id,reviewId,approved,comment,locale,name,productId,score&_where=` ;
 
     // Filter by productId
     if(typeof args["productId"] == "undefined"){

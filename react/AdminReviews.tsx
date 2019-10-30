@@ -114,7 +114,7 @@ function filtrar(){
               {review.approved ? 'yes' : 'not'}
             </td>
             <td>
-              <a className="f6 link dim ph3 pv2 mb2 dib white bg-near-black" href={"admin-reviews/" + review.reviewId}>Editar</a>
+              <a className="f6 link dim ph3 pv2 mb2 dib white bg-near-black" href={"admin-reviews/" + review.reviewId + '?id=' + review.id}>Editar</a>
             </td>
           </tr>
           )}
@@ -130,7 +130,7 @@ export default graphql(adminReviewsQuery, {
         productId: (props.query && props.query.productId) ? props.query.productId : undefined, 
         from: (props.query && props.query.from) ? props.query.from : 0 , 
         to:  (props.query && props.query.to) ? props.query.to : 10,
-        locale: (props.query && props.query.locale) ? props.query.locale : undefined, 
+        locale: (props.query && props.query.locale) ? props.query.locale : '', 
       }})
     }
 })(withRuntimeContext(AdminReviews))
