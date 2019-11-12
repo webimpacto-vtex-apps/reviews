@@ -7,14 +7,16 @@ import getProductReviewFile from './queries/getProductReviewFile.gql'
 
 const RatingInlineContent: FunctionComponent = (props:any) => {
   const { product } = useContext(ProductSummaryContext)
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-  console.log(props.data.getProductReviewFile);
-  return (
-    <div title={product.name}>
-       RATING INLINE
-      <Stars rating={(props.data.getProductReviewFile) ? props.data.getProductReviewFile.average : 0} />
-    </div>
-  )
+
+  if(props.data.getProductReviewFile && props.data.getProductReviewFile.average) {  
+    return (
+      <div title={product.name}>
+        <Stars rating={(props.data.getProductReviewFile) ? props.data.getProductReviewFile.average : 0} />
+      </div>
+    ) 
+  } else {
+    return <div></div>
+  }  
 }
 
 export default compose(
@@ -24,6 +26,5 @@ export default compose(
         id: props['data-product'].productId
       }})
     }
-  })//,
-  //graphql(getProductReviewFile, { name: 'getProductReviewFile' })
+  })
 )(RatingInlineContent)

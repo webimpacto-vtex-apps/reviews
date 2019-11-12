@@ -1,5 +1,5 @@
-query adminReviews($productId: Int, $from: Int, $to: Int, $locale: String){
-  adminReviews(productId: $productId, from: $from, to: $to, locale: $locale){
+query adminReviews($productId: Int, $from: Int, $to: Int, $locale: String, $approved: Boolean, $notapproved: Boolean){
+  adminReviews(productId: $productId, from: $from, to: $to, locale: $locale, approved: $approved, notapproved: $notapproved){
     reviewId
     approved
     comment

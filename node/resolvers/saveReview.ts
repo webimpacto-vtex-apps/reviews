@@ -69,7 +69,7 @@ export async function saveReview(_root: any, args: Args, ctx:any) {
                     },
                     method: 'GET',
                     url: URL,
-                }).then(function (response) {                    
+                }).then(function (response) {
                     // Por problemas con la caché en la API de VTEx, hay que tratar la respuesta para actualizarla con los datos que teníamos de esta review
                     if(args['review'].approved == true){
                         var reviewList = response.data;
@@ -86,31 +86,40 @@ export async function saveReview(_root: any, args: Args, ctx:any) {
                     }
 
                     // Generar información que se guardará en el fichero
-                    let average = 0;
-                    reviewList.length > 0 && reviewList.map(function(reviewObj:any){
-                        average += reviewObj.score;
-                    })
+                    let average = 0;                    
+                    typeof reviewList != "undefined" && reviewList != null && reviewList.length > 0 && reviewList.map(function(reviewObj:any){
+                        if(typeof reviewObj != "undefined"){
+                            average += reviewObj.score;
+                        }
+                    })                    
                     let json:any = {
                         cont: reviewList.length,
                         average: average/reviewList.length
                     }
 
-                    // Guardar en un fichero el resumen del producto                    
-                    const {vtex: ioContext} = ctx
-                    const vBase = VBaseClient(ioContext,productId + ".txt")
-                    vBase.saveFile(json)
+                    if(typeof reviewList[0] == "undefined"){
+                        // Eliminar fichero porque no tiene reviews
+                        const {vtex: ioContext} = ctx
+                        const vBase = VBaseClient(ioContext,productId + '.txt')
+                        vBase.deleteFile().catch(function(){return {}})
+                    }else{
+                        // Guardar en un fichero el resumen del producto                    
+                        const {vtex: ioContext} = ctx
+                        const vBase = VBaseClient(ioContext,productId + ".txt")
+                        vBase.saveFile(json)
+                    }
                 }).catch(function (error) {
-                    console.log("ERROR: " + URL);
+                    console.log("ERROR code: 001: " + URL);
                     console.log(error);
                 });
             }).catch(function (error) {
-                console.log("ERROR: " + URL); 
+                console.log("ERROR: 002: " + URL); 
                 console.log(error.response);
             });
         }
         return args['review'];
     }).catch(function (error) {
-        console.log("ERROR: ");
+        console.log("ERROR: 003");
         console.log(error);
     });
     return response;

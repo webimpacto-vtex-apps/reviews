@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext , useState, useEffect} from 'react'
-//import { FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import { ProductContext } from 'vtex.product-context'
 
 import getReviewsQuery from './queries/getReviews.gql'
@@ -48,10 +48,11 @@ const RatingSummaryTopContent: VtexFunctionComponent = (props: any) => {
     productReviews.map(function(review:any){
       totalScore+= review['score'];
     })
-    let averageScore = totalScore/cont
-    setScoreAverage(averageScore);
+    let averageScore = totalScore/cont;        
     if(isNaN(averageScore)){
       setScoreAverage('');
+    }else{
+      setScoreAverage( Math.round( averageScore * 10) / 10 );
     }
   }
   
@@ -69,14 +70,14 @@ const RatingSummaryTopContent: VtexFunctionComponent = (props: any) => {
       <div className="w-100 ph3 ph5-m ph2-xl mw9">
         {/*<span>Opiniones de clientes</span>*/}
         <div className={styles.stars} style={{ color: colorStars }}>
-          <span>{scoreAverage}</span> 
+          <span className={'f6'}>{scoreAverage}</span> 
           <Rating
             readonly
             initialRating={scoreAverage}
             {...ratingDynamicProps}
           />
         </div>        
-        <span>{productReviews.length} opiniones</span>
+        <span>{productReviews.length} <FormattedMessage id="opiniones"/></span>
       </div>
     </div>
   )

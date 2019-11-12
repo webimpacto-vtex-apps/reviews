@@ -2,7 +2,7 @@
   "vendor": "vtex",
   "name": "review-app-example",
   "version": "0.0.1",
-  "title": "Review App Example",
+  "title": "Review App",
   "description": "Example app of a review app in the platform.",
   "builders": {
     "messages": "1.x",
@@ -25,7 +25,7 @@
     "vtex.admin": "1.x"
   },
   "settingsSchema": {
-    "title": "Product Review Example",
+    "title": "Product Review",
     "type": "object",
     "properties": {
       "storeId": {
@@ -43,6 +43,11 @@
           "skuId",
           "slug"
         ]
+      },
+      "IconColor": {
+        "title": "Icon Color",
+        "description": "Enter the color (Hexadecimal)",
+        "type": "string"
       }
     }
   },

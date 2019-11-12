@@ -1,8 +1,7 @@
-import React, { FunctionComponent, useContext , useState, useEffect} from 'react'
+import React, { FunctionComponent, useState , useContext , useEffect} from 'react'
 import { withRuntimeContext } from 'vtex.render-runtime'
-//import { FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import { ProductContext } from 'vtex.product-context'
-
 import ReviewForm from './ReviewForm'
 import getReviewsQuery from './queries/getReviews.gql'
 //import {flowRight as compose} from 'lodash';
@@ -49,7 +48,7 @@ const RatingSummaryList: VtexFunctionComponent = (props: any) => {
     productReviews.map(function(review:any){
       totalScore+= review['score'];
     })
-    setScoreAverage(totalScore/cont);
+    setScoreAverage( Math.round( (totalScore/cont) * 10) / 10 );
   }
   
   function generateReviewsSummary(){
@@ -63,7 +62,7 @@ const RatingSummaryList: VtexFunctionComponent = (props: any) => {
     let cont = productReviews.length;
   
     productReviews.map(function(review:any){
-      resumen[review['score']] = 1;
+      resumen[review['score']] = 1 + resumen[review['score']] ;
     })
 
     Object.keys(resumen).map(function(key) {
@@ -72,7 +71,14 @@ const RatingSummaryList: VtexFunctionComponent = (props: any) => {
     
     let HTML_RatingSummary:any = [];
     Object.keys(resumen).map(function(key) {
-      HTML_RatingSummary.push(<div key={key}><span>{key} estrellas</span> <div className={styles.reviewProgressBarContainer}><div className={styles.reviewProgressBar} style={{width:resumen[key]+'%'}}></div></div></div>)
+      HTML_RatingSummary.push(
+        <div key={key}>
+          <Rating readonly initialRating={key as unknown as number} {...ratingDynamicProps} />
+          <div className={styles.reviewProgressBarContainer}>
+            <div className={styles.reviewProgressBar} style={{width:resumen[key]+'%'}}></div>
+          </div>
+        </div>
+      );
     });
 
     setResumenReviews(HTML_RatingSummary);
@@ -85,8 +91,8 @@ const RatingSummaryList: VtexFunctionComponent = (props: any) => {
 
   if(productReviews.length>0){
     return (
-      <div className="w-25 ph3 ph5-m ph2-xl mw9 ba">  {/* Resumen de reviews */}
-        <strong>Opiniones de los clientes</strong>
+      <div className={`w-100 w-50-ns w-30-l pa4 mw9 ba b--gray ${styles.ratingSummaryContainer}`}>  {/* Resumen de reviews */}
+        <strong><FormattedMessage id="Opiniones de los clientes"/></strong>
       
         <div className={styles.stars} style={{ color: colorStars }}>
           <span>{scoreAverage}</span> 
@@ -94,7 +100,9 @@ const RatingSummaryList: VtexFunctionComponent = (props: any) => {
             readonly
             initialRating={scoreAverage}
             {...ratingDynamicProps}
-          /><span> ({productReviews.length})</span>
+          />
+          <br/>
+          <span>{productReviews.length} <FormattedMessage id="opiniones"/></span>
         </div>
         
         <hr/>
@@ -106,12 +114,11 @@ const RatingSummaryList: VtexFunctionComponent = (props: any) => {
     )
   }else{
     return (
-      <div className="w-25 ph3 ph5-m ph2-xl mw9 ba">  {/* Resumen de reviews */}
-        <strong>Opiniones de los clientes</strong>
+      <div className={ `w-100 w-50-ns w-30-l pa4 mw9 ba b--gray ${styles.ratingSummaryContainer}`}>
+        <strong><FormattedMessage id="Opiniones de los clientes"/></strong>
       
-        <div>Todavía no hay opiniones</div>
-        <hr/>
-        {/* Formulario nueva review */}      
+        <div><FormattedMessage id="Todavía no hay opiniones"/></div>
+        <hr/> 
         <ReviewForm/>
       </div>
     )

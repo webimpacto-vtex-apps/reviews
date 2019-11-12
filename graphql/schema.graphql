@@ -29,19 +29,13 @@ type Query {
   appSettings: Settings @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
 
   productReviews(productId: Int!, approved: Boolean ,locale: String, appSettings: Boolean): [Review] # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
-  adminReviews(productId: Int, from: Int, to: Int, locale: String): [Review] # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
+  adminReviews(productId: Int, from: Int, to: Int, locale: String, approved: Boolean, notapproved: Boolean): [Review] # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   adminReview(reviewId: Int): Review # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   getProductReviewFile(id: Int): ProductReviewFile # @cacheControl(scope: PUBLIC, maxAge: MEDIUM)
   #profile(
     #customFields: String
   #): Profile @cacheControl(scope: PRIVATE) @withCurrentProfile
-
   #getReviews(productId: String): String 
-  #isUserLogged: boolean
-  #getProductReviewList(productId: String): [Review]
-  #getProductReviewListByLang(productId: String, idLang: String): [Review]
-  #addProductReview(review: Review): boolean
-  #validateReview(idReview: String): boolean
   #getProductReviewOverall(productId: String): Array
 }
 
@@ -52,4 +46,5 @@ type Mutation {
 type Settings {
   storeId: String
   productBinding: String
+  IconColor: String
 }

@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo'
 export interface Settings {
   storeId: string
   productBinding: string
+  IconColor: string
 }
 
 const withSettings = graphql<{}, Settings>(settings)

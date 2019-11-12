@@ -1,8 +1,6 @@
 import React, { FunctionComponent, useContext } from 'react'
-//import { FormattedMessage } from 'react-intl'
 import { ProductContext } from 'vtex.product-context'
 import { Settings } from './components/withSettings'
-
 import { graphql } from 'react-apollo'
 import getReviewsQuery from './queries/getReviews.gql'
 import RatingSummary from './RatingSummary'
@@ -18,7 +16,7 @@ const ReviewsContent: FunctionComponent<Partial<DataProps<Settings>>> = (props:a
     return null
   }
 
-  let ratingDynamicProps:RatingComponentProps = {}  
+  let ratingDynamicProps:RatingComponentProps = {}
   const { colorStars, starsType } = props
   if(starsType == 'Custom Image'){
     let { imageStarsEmpty, imageStarsFilled } = props;
@@ -29,8 +27,7 @@ const ReviewsContent: FunctionComponent<Partial<DataProps<Settings>>> = (props:a
 
     ratingDynamicProps.emptySymbol = <img src={imageStarsEmpty} className={`${styles.star} ${styles['star--empty']}`} />
     ratingDynamicProps.fullSymbol = <img src={imageStarsFilled} className={`${styles.star} ${styles['star--filled']}`} />
-  }
-  else{
+  } else{
     ratingDynamicProps.emptySymbol = `${styles.star} ${styles['star--empty']} ${fontAwesome.fa} ${fontAwesome['fa-star-o']}`
     ratingDynamicProps.fullSymbol = `${styles.star} ${styles['star--filled']} ${fontAwesome.fa} ${fontAwesome['fa-star']}`
   }
@@ -39,7 +36,7 @@ const ReviewsContent: FunctionComponent<Partial<DataProps<Settings>>> = (props:a
     <div className="flex justify-center">
       <RatingSummary/>
       {/* Listado de reviews */}
-      <div className="w-25 ph3 ph5-m ph5-xl mw9 mb1 f6">
+      <div className="w-100 w-50-ns w-30-l ph5 mw9 mb1 f6">
         {productReviews && productReviews.map((review:any, indice:any) =>
           <div key={indice} className="product-reviews-item mb4">
             <span className="product-reviews-name b mv1">{review.name}</span>
@@ -60,9 +57,8 @@ const ReviewsContent: FunctionComponent<Partial<DataProps<Settings>>> = (props:a
   )
 }
 
-//export default withReviews(Reviews)
 export default graphql(getReviewsQuery, {
-    options: (props:any) => {      
+    options: (props:any) => {
       return (
         {
           variables: { 

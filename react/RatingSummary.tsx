@@ -14,7 +14,7 @@ const RatingSummary: VtexFunctionComponent = (props:any) => {
     return null
   } 
 
-  return <RatingSummaryList data-producto={product.productId} data-locale={props.runtime.culture.locale} />
+  return <RatingSummaryList data-producto={product.productId} data-locale={props.runtime.culture.language} />
 }
 
 export default (withRuntimeContext(RatingSummary))

@@ -7,4 +7,4 @@
       "component": "AdminReview",
       "path": "/admin/app/admin-reviews/:reviewId"
     }
-  }
+  } 

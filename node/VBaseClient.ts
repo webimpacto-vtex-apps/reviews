@@ -21,5 +21,8 @@ export default function VBaseClient({ account, workspace, region, authToken }: a
         getFile: () => {
             return client.getFile(service, fileName)
         },
+        deleteFile: () => {
+            return client.deleteFile(service, fileName)
+        }
     }
 }

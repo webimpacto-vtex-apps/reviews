@@ -2,5 +2,6 @@ query appSettings {
   appSettings {
     storeId
     productBinding
+    IconColor
   }
 }
