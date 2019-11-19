@@ -22,7 +22,8 @@
     "vtex.product-context": "0.x",
     "vtex.store": "2.x",
     "vtex.store-graphql": "2.x",
-    "vtex.admin": "1.x"
+    "vtex.admin": "1.x",
+    "vtex.styleguide": "9.x"
   },
   "settingsSchema": {
     "title": "Product Review",
