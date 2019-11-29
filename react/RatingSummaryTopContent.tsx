@@ -24,6 +24,8 @@ const RatingSummaryTopContent: VtexFunctionComponent = (props: any) => {
   }
   
   const [scoreAverage,setScoreAverage] = useState();
+  const [worstRating,setWorstRating] = useState();
+  const [bestRating,setBestRating] = useState();
   const { colorStars, starsType } = props
 
   let ratingDynamicProps:RatingComponentProps = {}
@@ -46,6 +48,12 @@ const RatingSummaryTopContent: VtexFunctionComponent = (props: any) => {
     let cont = productReviews.length;
     let totalScore = 0;
     productReviews.map(function(review:any){
+      if(review['score'] < worstRating || isNaN(worstRating)){
+        setWorstRating(review['score'])
+      }
+      if(review['score'] > bestRating || isNaN(bestRating)){
+        setBestRating(review['score'])
+      }
       totalScore+= review['score'];
     })
     let averageScore = totalScore/cont;        
@@ -66,6 +74,16 @@ const RatingSummaryTopContent: VtexFunctionComponent = (props: any) => {
 
   return (
     <div title={product.productName}>
+       <script type="application/ld+json" dangerouslySetInnerHTML={ { __html: `
+            {
+              "@context": "https://schema.org/",
+              "@type": "AggregateRating",
+              "@id": "` + window.location.href + `",
+              "worstRating": "` + worstRating + `",
+              "ratingValue": "` + scoreAverage + `",
+              "bestRating": "` + bestRating + `",
+              "reviewCount": "` + productReviews.length + `"
+            }`}} />
       {/* Resumen de reviews */}
       <div className="w-100 ph3 ph5-m ph2-xl mw9">
         {/*<span>Opiniones de clientes</span>*/}

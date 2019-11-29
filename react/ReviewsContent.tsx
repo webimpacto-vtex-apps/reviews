@@ -39,6 +39,21 @@ const ReviewsContent: FunctionComponent<Partial<DataProps<Settings>>> = (props:a
       <div className="w-100 w-50-ns w-30-l ph5 mw9 mb1 f6">
         {productReviews && productReviews.map((review:any, indice:any) =>
           <div key={indice} className="product-reviews-item mb4">
+            <script type="application/ld+json" dangerouslySetInnerHTML={ { __html: `
+            {
+              "@context": "https://schema.org/",
+              "@type": "Review",
+              "author": {
+                "@type": "Person",
+                "name": "`+review.name+`"
+              },
+              "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": "` + review.score + `",
+                "bestRating": "5"
+              },
+              "reviewBody": "` + review.comment + `"
+            }`}} />
             <span className="product-reviews-name b mv1">{review.name}</span>
             <div className="product-reviews-score mv1">
               <div className={styles.stars} style={{ color: colorStars }}>
