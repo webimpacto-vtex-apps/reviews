@@ -9,6 +9,7 @@ import { graphql } from 'react-apollo'
 import { withRuntimeContext } from 'vtex.render-runtime'
 import { Table } from 'vtex.styleguide'
 
+//const Checkbox = require('../Checkbox').default
 interface VtexFunctionComponent extends FunctionComponent {
   getSchema?(props: any): {}
 }
@@ -16,23 +17,98 @@ interface VtexFunctionComponent extends FunctionComponent {
 //import emptyStarDefault from './img/star-empty.png'
 //import emptyFullDefault from './img/star-yellow.png'
 const AdminReviews: VtexFunctionComponent = (props: any) => {
-  const { colorStars, starsType } = props
-  const [filterProductId, setFilterProductId] = useState(props.query.productId ? props.query.productId : '');
-  const [filterLocale, setFilterLocale] = useState(props.query.locale ? props.query.locale : '');
-  const [filterApproved, setFilterApproved] = useState(props.query.approved ? props.query.approved : '');
-  const [filterNotApproved, setFilterNotApproved] = useState(props.query.notapproved ? props.query.notapproved : '');
+  const { /*colorStars,*/ starsType } = props
+  //const [filterProductId, setFilterProductId] = useState(props.query.productId ? props.query.productId : '');
+  //const [filterLocale, setFilterLocale] = useState(props.query.locale ? props.query.locale : '');
+  //const [filterApproved, setFilterApproved] = useState(props.query.approved ? props.query.approved : '');
+  //const [filterNotApproved, setFilterNotApproved] = useState(props.query.notapproved ? props.query.notapproved : '');
   
-  const [tableLength,setTableLength] = useState(10);
+  let ratingDynamicProps:RatingComponentProps = {}
+  if(starsType == 'Custom Image'){
+    let { imageStarsEmpty, imageStarsFilled } = props;
+
+    // DEFAULT IMAGES if NOT EXISTS 
+    if(!imageStarsEmpty) imageStarsEmpty = 'https://raw.githubusercontent.com/dreyescat/react-rating/master/assets/images/star-grey.png';
+    if(!imageStarsFilled) imageStarsFilled = 'https://raw.githubusercontent.com/dreyescat/react-rating/master/assets/images/star-yellow.png';
+
+    ratingDynamicProps.emptySymbol = <img src={imageStarsEmpty} className={`${styles.star} ${styles['star--empty']}`} />
+    ratingDynamicProps.fullSymbol = <img src={imageStarsFilled} className={`${styles.star} ${styles['star--filled']}`} />
+  }
+  else{
+    ratingDynamicProps.emptySymbol = `${styles.star} ${styles['star--empty']} ${fontAwesome.fa} ${fontAwesome['fa-star-o']}`
+    ratingDynamicProps.fullSymbol = `${styles.star} ${styles['star--filled']} ${fontAwesome.fa} ${fontAwesome['fa-star']}`
+  }
+
+  const defaultSchema = {
+    properties: {
+      productId: {
+        title: 'Producto',
+        width: 80,
+      },
+      name: {
+        title: 'Nombre',
+        width: 150,
+      },
+      score: {
+        title: 'Puntuacion',
+        width: 90,
+        cellRenderer: (cellData:any) => {
+          return (
+            <Rating
+              readonly
+              initialRating={cellData.cellData}
+              {...ratingDynamicProps}
+            />
+          )
+        },
+      },
+      locale: {
+        title: 'Idioma',
+        width: 60,
+      },
+      comment: {
+        title: 'Comentario',
+        minWidth: 300,
+      },
+      approved: {
+        title: 'Aprobado',
+        width: 80,
+        cellRenderer: (cellData:any) => {
+          return (
+            <input type="checkbox" checked={cellData.rowData.approved} disabled/>
+          )
+        },
+      },
+      actions: {
+        title: 'Acciones',
+        width: 100,
+        cellRenderer: (cellData:any) => {
+          return (
+            <a className="f6 link dim ph3 pv2 mb2 dib white bg-near-black" href={"admin-reviews/" + cellData.rowData.reviewId + '?id=' + cellData.rowData.id}>
+              <FormattedMessage id="Editar"/>
+            </a>
+          )
+        },
+      },
+    },
+  }
+
+  const [tableLength] = useState(10);
   const [currentPage,setCurrentPage] = useState(1);
   const [slicedData,setSlicedData] = useState(props.data.adminReviews ? props.data.adminReviews.slice(0, tableLength): []);
   const [currentItemFrom,setCurrentItemFrom] = useState(1);
   const [currentItemTo,setCurrentItemTo] = useState(tableLength);
-  const [itemsLength, setItemsLength] = useState(props.data.adminReviews?props.data.adminReviews.length:999);
+  const [itemsLength, setItemsLength] = useState(props.data.adminReviews?props.data.adminReviews.length:999999999999);
   const [emptyStateLabel] = useState('Nothing to show.');
   const [filterStatements,setFilterStatements] = useState([]);
+  
+  // La primera carga de la app a veces fallaba. Con esto se soluciona:
+  if(props.data.adminReviews && itemsLength==999999999999) {
+    setItemsLength(props.data.adminReviews.length);
+    setSlicedData(props.data.adminReviews.slice(0, tableLength));
+  }
 
-  //const Checkbox = require('../Checkbox').default
-  function approvedSelectorObject( value:any, onChange:any ) {
+  function approvedSelectorObject( value:any/*, onChange:any */) {
     const initialValue = {
       approved: true,
       notapproved: true,
@@ -42,6 +118,9 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
         ...(value || initialValue),
         [key]: value ? !value[key] : false,
       }
+      console.log("newValue",newValue);
+      console.log("key",key);
+      console.log("value",value);
       return newValue
     }
     return (
@@ -57,12 +136,12 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
                 checked={value ? value[opt] : value[opt]}
                 name="default-checkbox-group"
                 onChange={() => {
-                  const newValue = toggleValueByKey(`${opt}`)
-                  const newValueKeys = Object.keys(newValue)
-                  const isEmptyFilter = !newValueKeys.some(
+                  /*const newValue = */toggleValueByKey(`${opt}`)
+                  //const newValueKeys = Object.keys(newValue)
+                  /*const isEmptyFilter = !newValueKeys.some(
                     key => !newValue[key]
-                  )
-                  onChange(isEmptyFilter ? null : newValue)
+                  )*/
+                  //onChange(isEmptyFilter ? null : newValue)
                 }}
                 value={opt}
               />
@@ -73,7 +152,7 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
       </div>
     )
   }
-
+  
   function handleNextClick() {
     const newPage = currentPage + 1
     const itemFrom = currentItemTo + 1
@@ -81,7 +160,6 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
     const data = props.data.adminReviews.slice(itemFrom - 1, itemTo)
     goToPage(newPage, itemFrom, itemTo, data)
   }
-
   function handlePrevClick() {
     if (currentPage === 0) return
     const newPage = currentPage - 1
@@ -97,33 +175,15 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
     setSlicedData(slicedData);
   }
 
-  function  handleRowsChange(e:any, value:any) {
-    console.log(e);
-    console.log(value)
-    setTableLength(parseInt(value));
-    setCurrentItemTo(parseInt(value));
-    /*this.setState(
-      {
-        tableLength: parseInt(value),
-        currentItemTo: parseInt(value),
-      },
-      () => {
-        // this callback garantees new sliced items respect filters and tableLength
-        const { filterStatements } = this.state
-        this.handleFiltersChange(filterStatements)
-      }
-    )*/
-  }
-
   function handleFiltersChange(statements = []) {
     // here you should receive filter values, so you can fire mutations ou fetch filtered data from APIs
     // For the sake of example I'll filter the data manually since there is no API
-    
+    console.log("handleFiltersChange")
     let newData = props.data.adminReviews.slice()
     statements.forEach(st => {
       if (!st) return
       const { subject, verb, object } = st
-      console.log(verb)
+      console.log("VERB: ",verb)
       switch (subject) {
         case 'approved':
           if (!object) return
@@ -160,83 +220,45 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
     setItemsLength(newDataLength)
     setCurrentItemTo(tableLength > newDataLength ? newDataLength : tableLength)
   }
-
-  const defaultSchema = {
-    properties: {
-      productId: {
-        title: 'Producto',
-        width: 80,
-        //sortable: true
+  function simpleInputObject( value:any, onChange:any) {
+    return (
+      <input value={value || ''} onChange={e => onChange(e.target.value)} />
+    )
+  }
+  function simpleInputVerbsAndLabel() {
+    return {
+      renderFilterLabel: (st:any) => {
+        if (!st || !st.object) {
+          console.log("Devuelvo 'Any'");
+          // you should treat empty object cases only for alwaysVisibleFilters
+          return 'Any'
+        }
+        return `${
+          st.verb === '=' ? 'is' : st.verb === '!=' ? 'is not' : 'contains'
+        } ${st.object}`
       },
-      name: {
-        title: 'Nombre',
-        width: 150,
-        //sortable: true
-      },
-      score: {
-        title: 'Puntuacion',
-        width: 90,
-        //sortable: true,
-        cellRenderer: (cellData:any) => {
-          return (
-            <Rating
-              readonly
-              initialRating={cellData.cellData}
-              {...ratingDynamicProps}
-            />
-          )
+      verbs: [
+        {
+          label: 'is',
+          value: '=',
+          object: simpleInputObject,
         },
-      },
-      locale: {
-        title: 'Idioma',
-        width: 60,
-        //sortable: true
-      },
-      comment: {
-        title: 'Comentario',
-        minWidth: 300,
-      },
-      approved: {
-        title: 'Aprobado',
-        width: 80,
-        // sortable: true
-        cellRenderer: (cellData:any) => {
-          return (
-            //<a className="f6 link dim ph3 pv2 mb2 dib white bg-near-black" href={"admin-reviews/" + cellData.rowData.reviewId + '?id=' + cellData.rowData.id}><FormattedMessage id="Editar"/></a>
-            <input type="checkbox" checked={cellData.rowData.approved} disabled/>
-          )
+        {
+          label: 'is not',
+          value: '!=',
+          object: simpleInputObject,
         },
-      },
-      actions: {
-        title: 'Acciones',
-        width: 100,
-        cellRenderer: (cellData:any) => {
-          return (
-            <a className="f6 link dim ph3 pv2 mb2 dib white bg-near-black" href={"admin-reviews/" + cellData.rowData.reviewId + '?id=' + cellData.rowData.id}><FormattedMessage id="Editar"/></a>
-          )
+        {
+          label: 'contains',
+          value: 'contains',
+          object: simpleInputObject,
         },
-      },
-    },
+      ],
+    }
   }
 
 
-  let ratingDynamicProps:RatingComponentProps = {}
-  if(starsType == 'Custom Image'){
-    let { imageStarsEmpty, imageStarsFilled } = props;
-
-    // DEFAULT IMAGES if NOT EXISTS 
-    if(!imageStarsEmpty) imageStarsEmpty = 'https://raw.githubusercontent.com/dreyescat/react-rating/master/assets/images/star-grey.png';
-    if(!imageStarsFilled) imageStarsFilled = 'https://raw.githubusercontent.com/dreyescat/react-rating/master/assets/images/star-yellow.png';
-
-    ratingDynamicProps.emptySymbol = <img src={imageStarsEmpty} className={`${styles.star} ${styles['star--empty']}`} />
-    ratingDynamicProps.fullSymbol = <img src={imageStarsFilled} className={`${styles.star} ${styles['star--filled']}`} />
-  }
-  else{
-    ratingDynamicProps.emptySymbol = `${styles.star} ${styles['star--empty']} ${fontAwesome.fa} ${fontAwesome['fa-star-o']}`
-    ratingDynamicProps.fullSymbol = `${styles.star} ${styles['star--filled']} ${fontAwesome.fa} ${fontAwesome['fa-star']}`
-  }
-
-  function filtrar(){
+  /*function filtrar(){
     let URLQuery = '';
     
     let productId = (document.getElementById("review_filter_productId") as HTMLInputElement).value;
@@ -264,13 +286,7 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
       page: 'admin.app.admin-reviews',
       query: ''+URLQuery+''
     });
-    
-    /*props.runtime.navigate({
-      params: { "term": "search" },
-      query: 'map=ft',
-      fallbackToWindowLocation: false,
-    });*/
-  }
+  }*/
 
   return (
     <div className="w-100 ph3 ph5-m ph2-xl mw9 mt4">  {/* Resumen de reviews */}
@@ -280,17 +296,16 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
           schema={defaultSchema}
           items={slicedData}
           emptyStateLabel={emptyStateLabel}
-          density="high"
+          density="medium"
           pagination={{
             onNextClick: handleNextClick,
             onPrevClick: handlePrevClick,
             currentItemFrom: currentItemFrom,
             currentItemTo: currentItemTo,
-            onRowsChange: handleRowsChange,
+            //onRowsChange: handleRowsChange,
             textShowRows: 'Show rows',
             textOf: 'of',
             totalItems: itemsLength,
-            //rowsOptions: [5, 10, 15, 25],
           }}
           filters={{
             alwaysVisibleFilters: ['approved', 'locale'],
@@ -304,6 +319,7 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
                 renderFilterLabel: (st:any) => {
                   if (!st || !st.object) {
                     // you should treat empty object cases only for alwaysVisibleFilters
+                    console.log(st);
                     return 'All'
                   }
                   const keys = st.object ? Object.keys(st.object) : {}
@@ -330,84 +346,16 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
                   },
                 ],
               },
-              /*locale: {
+              locale: {
                 label: 'Locale',
-                ...this.simpleInputVerbsAndLabel(),
-              },*/
+                ...simpleInputVerbsAndLabel(),
+              },
             },
           }}
         />
       </div>
-      <table cellPadding="3" cellSpacing="0" className={"f6 w-100 mw8 center"}>
-        <thead>
-          <tr className="filters ma3">
-            <th colSpan={7}>
-              <div className={"w-25 dib"}><span><FormattedMessage id="Product ID"/>: </span><input type="text" id="review_filter_productId" className={"w-30"} onChange={(e) => {setFilterProductId(e.target.value)}} value={filterProductId}/></div>
-              <div className={"w-20 dib"}><span><FormattedMessage id="Approved"/>: </span><input type="checkbox" id="review_filter_approved" onChange={(e) => {setFilterApproved(e.target.checked)}} checked={filterApproved as boolean}/></div>
-              <div className={"w-20 dib"}><span><FormattedMessage id="NotApproved"/>: </span><input type="checkbox" id="review_filter_notapproved" onChange={(e) => {setFilterNotApproved(e.target.checked)}} checked={filterNotApproved as boolean}/></div>
-              <div className={"w-25 dib"}><span><FormattedMessage id="Locale"/>: </span><input type="text" id="review_filter_locale" className={"w-30"} onChange={(e) => {setFilterLocale(e.target.value)}} value={filterLocale}/></div>
-              <button className={"w-10 dib"} onClick={filtrar}><FormattedMessage id="FILTER"/></button>
-            </th>
-          </tr>
-          <tr>
-            <th className={"fw6 bb b--black-20 tl pb3 pr3 bg-white tl"}><FormattedMessage id="Product"/></th>
-            <th className={"fw6 bb b--black-20 tl pb3 pr3 bg-white tl"} style={{width: "130px"}}><FormattedMessage id="Nombre"/></th>
-            <th className={"fw6 bb b--black-20 tl pb3 pr3 bg-white tc"} style={{width: "100px"}}><FormattedMessage id="Score"/></th>
-            <th className={"fw6 bb b--black-20 tl pb3 pr3 bg-white tl"}><FormattedMessage id="Locale"/></th>
-            <th className={"fw6 bb b--black-20 tl pb3 pr3 bg-white tl"}><FormattedMessage id="Comment"/></th>
-            <th className={"fw6 bb b--black-20 tl pb3 pr3 bg-white tc"}><FormattedMessage id="Approved"/></th>
-            <th className={"fw6 bb b--black-20 tl pb3 pr3 bg-white tc"}></th>
-          </tr> 
-        </thead>
-        <tbody>
-        {props.data.adminReviews && props.data.adminReviews.map((review:any, indice:any) =>
-          <tr key={indice} className="product-reviews-item ba mb2">
-            <td className="pv3 pr3 bb b--black-20 product-reviews-productId">
-              {review.productId}
-            </td>
-            <td className="pv3 pr3 bb b--black-20 product-reviews-name">
-              {review.name}
-            </td>
-            <td className="pv3 pr3 bb b--black-20 product-reviews-score">
-              <div className={styles.stars} style={{ color: colorStars }}>
-                <Rating
-                  readonly
-                  initialRating={review.score}
-                  {...ratingDynamicProps}
-                />
-              </div>
-            </td>
-            <td className="pv3 pr3 bb b--black-20 product-reviews-locale">
-              {review.locale}
-            </td>
-            <td className="pv3 pr3 bb b--black-20 product-reviews-comment">
-              {review.comment}
-            </td>
-            <td className="pv3 pr3 bb b--black-20 product-reviews-approved tc">
-              {review.approved ? 'yes' : 'not'}
-            </td>
-            <td className="pv3 pr3 bb b--black-20">
-              <a className="f6 link dim ph3 pv2 mb2 dib white bg-near-black" href={"admin-reviews/" + review.reviewId + '?id=' + review.id}><FormattedMessage id="Editar"/></a>
-            </td>
-          </tr>
-          )}
-        </tbody>
-      </table>
     </div>
   )
 }
 
-
-
-export default graphql(adminReviewsQuery, {
-    options: (props:any) => {
-      return ({ variables: { 
-        productId: (props.query && props.query.productId) ? props.query.productId : undefined, 
-        from: (props.query && props.query.from) ? props.query.from : 0 , 
-        to:  (props.query && props.query.to) ? props.query.to : 99,
-        locale: (props.query && props.query.locale) ? props.query.locale : '', 
-        approved: (props.query && props.query.approved) ? props.query.approved : '', 
-        notapproved: (props.query && props.query.notapproved) ? props.query.notapproved : '', 
-      }})
-    }
-})(withRuntimeContext(AdminReviews))
+export default graphql(adminReviewsQuery)(withRuntimeContext(AdminReviews))
