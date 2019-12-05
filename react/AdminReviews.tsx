@@ -8,6 +8,9 @@ import adminReviewsQuery from './queries/adminReviews.gql'
 import { graphql } from 'react-apollo'
 import { withRuntimeContext } from 'vtex.render-runtime'
 import { Table } from 'vtex.styleguide'
+import { Checkbox } from 'vtex.styleguide'
+import { Input } from 'vtex.styleguide'
+import { FilterBar } from 'vtex.styleguide'
 
 //const Checkbox = require('../Checkbox').default
 interface VtexFunctionComponent extends FunctionComponent {
@@ -18,10 +21,10 @@ interface VtexFunctionComponent extends FunctionComponent {
 //import emptyFullDefault from './img/star-yellow.png'
 const AdminReviews: VtexFunctionComponent = (props: any) => {
   const { /*colorStars,*/ starsType } = props
-  //const [filterProductId, setFilterProductId] = useState(props.query.productId ? props.query.productId : '');
+  const [filterProductId, setFilterProductId] = useState(props.query.productId ? props.query.productId : '');
   //const [filterLocale, setFilterLocale] = useState(props.query.locale ? props.query.locale : '');
-  //const [filterApproved, setFilterApproved] = useState(props.query.approved ? props.query.approved : '');
-  //const [filterNotApproved, setFilterNotApproved] = useState(props.query.notapproved ? props.query.notapproved : '');
+  const [filterApproved, setFilterApproved] = useState(props.query.approved ? props.query.approved : '');
+  const [filterNotApproved, setFilterNotApproved] = useState(props.query.notapproved ? props.query.notapproved : '');
   
   let ratingDynamicProps:RatingComponentProps = {}
   if(starsType == 'Custom Image'){
@@ -100,57 +103,12 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
   const [currentItemTo,setCurrentItemTo] = useState(tableLength);
   const [itemsLength, setItemsLength] = useState(props.data.adminReviews?props.data.adminReviews.length:999999999999);
   const [emptyStateLabel] = useState('Nothing to show.');
-  const [filterStatements,setFilterStatements] = useState([]);
+  const [statements,setStatements] = useState([]);
   
   // La primera carga de la app a veces fallaba. Con esto se soluciona:
   if(props.data.adminReviews && itemsLength==999999999999) {
     setItemsLength(props.data.adminReviews.length);
     setSlicedData(props.data.adminReviews.slice(0, tableLength));
-  }
-
-  function approvedSelectorObject( value:any/*, onChange:any */) {
-    const initialValue = {
-      approved: true,
-      notapproved: true,
-    }
-    const toggleValueByKey = (key: any) => {
-      const newValue = {
-        ...(value || initialValue),
-        [key]: value ? !value[key] : false,
-      }
-      console.log("newValue",newValue);
-      console.log("key",key);
-      console.log("value",value);
-      return newValue
-    }
-    return (
-      <div>
-        {Object.keys(initialValue).map((opt, index) => {
-          console.log("value")
-          console.log(value)
-          return (
-            <div className="mb3" key={`class-statment-object-${opt}-${index}`}>
-              <input type="checkbox"
-                //checked={value ? value[opt] : false}
-                //label={opt}
-                checked={value ? value[opt] : value[opt]}
-                name="default-checkbox-group"
-                onChange={() => {
-                  /*const newValue = */toggleValueByKey(`${opt}`)
-                  //const newValueKeys = Object.keys(newValue)
-                  /*const isEmptyFilter = !newValueKeys.some(
-                    key => !newValue[key]
-                  )*/
-                  //onChange(isEmptyFilter ? null : newValue)
-                }}
-                value={opt}
-              />
-              <label>{opt}</label>
-            </div>
-          )
-        })}
-      </div>
-    )
   }
   
   function handleNextClick() {
@@ -175,57 +133,12 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
     setSlicedData(slicedData);
   }
 
-  function handleFiltersChange(statements = []) {
-    // here you should receive filter values, so you can fire mutations ou fetch filtered data from APIs
-    // For the sake of example I'll filter the data manually since there is no API
-    console.log("handleFiltersChange")
-    let newData = props.data.adminReviews.slice()
-    statements.forEach(st => {
-      if (!st) return
-      const { subject, verb, object } = st
-      console.log("VERB: ",verb)
-      switch (subject) {
-        case 'approved':
-          if (!object) return
-          /*const approvedMap = {
-            'true': 'true',
-            'false': 'false',
-          }*/
-          console.log("OBJECT")
-          console.log(object)
-          console.log(subject)
-          newData = newData.filter(
-            function(item:any){
-              return item.approved == true
-            }
-            //item => object[approvedMap[item.approved]]
-            )
-          break
-        case 'name':
-        case 'email':
-          /*if (verb === 'contains') {
-            newData = newData.filter(item => item[subject].includes(object))
-          } else if (verb === '=') {
-            newData = newData.filter(item => item[subject] === object)
-          } else if (verb === '!=') {
-            newData = newData.filter(item => item[subject] !== object)
-          }*/
-          break
-      }
-    })
-    const newDataLength = newData.length
-    const newSlicedData = newData.slice(0, tableLength)
-    setFilterStatements(statements)
-    setSlicedData(newSlicedData)
-    setItemsLength(newDataLength)
-    setCurrentItemTo(tableLength > newDataLength ? newDataLength : tableLength)
-  }
-  function simpleInputObject( value:any, onChange:any) {
+  function SimpleInputObject( {value, onChange}:any) {
     return (
-      <input value={value || ''} onChange={e => onChange(e.target.value)} />
+      <Input value={value || ''} onChange={(e:any) => onChange(e.target.value)} />
     )
   }
-  function simpleInputVerbsAndLabel() {
+  /*function simpleInputVerbsAndLabel() {
     return {
       renderFilterLabel: (st:any) => {
         if (!st || !st.object) {
@@ -255,7 +168,7 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
         },
       ],
     }
-  }
+  }*/
 
 
   /*function filtrar(){
@@ -287,10 +200,184 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
       query: ''+URLQuery+''
     });
   }*/
+  function filtrar(statements_: any){
+    let URLQuery = '';
+    
+    if(statements_){
+      setStatements(statements_);
+    }
+    
+    statements_.map((el:any)=>{
+      switch(el.subject) { 
+        case "product": {
+          setFilterProductId((el.object) ? el.object : filterProductId);
+          let productId = el.object;
+          if(!isNaN(parseInt(productId))){
+            URLQuery = URLQuery + '&productId=' + productId;
+          } 
+          break;  
+        } 
+        case "approved": {
+          setFilterNotApproved((el.object["not approved"]) ? el.object["not approved"] : filterNotApproved);
+          setFilterApproved((el.object["approved"]) ? el.object["approved"] : filterApproved);
+          let filterApprovedAux = el.object["approved"];
+          let filterNotApprovedAux = el.object["not approved"];
+          if(!filterApprovedAux || !filterNotApprovedAux){
+            if(filterApprovedAux){
+              URLQuery = URLQuery + '&approved=true';
+            }
+            if(filterNotApprovedAux){
+              URLQuery = URLQuery + '&notapproved=true';
+            }
+          }
+          break; 
+        } 
+        default: {
+          break; 
+        } 
+     }
+    });
 
+    /*let locale = (document.getElementById("review_filter_locale") as HTMLInputElement).value;
+    if(locale != ''){
+      URLQuery = URLQuery + '&locale=' + locale;
+    }*/
+
+    props.runtime.navigate({
+      query: ''+URLQuery+'',
+      page: 'admin.app.admin-reviews',
+    });
+   
+    setTimeout(() => {
+      location.reload();
+    }, 100);
+  }
+
+  function ApprovedSelectorObject({ value, error, onChange }:any) {
+    const initialValue = {
+      "approved": true,
+      "not approved": true,
+      ...(value || {}),
+    }
+    const toggleValueByKey = (key:any) => {
+      const newValues = {
+        ...(value || initialValue),
+        [key]: value ? !value[key] : false,
+      }
+      return newValues
+    }
+    return (
+      <div>
+        {Object.keys(initialValue).map((opt, index) => {
+          return (
+            <div className="mb3" key={`class-statment-object-${opt}-${index}`}>
+              <Checkbox
+                checked={value ? value[opt] : initialValue[opt]}
+                id={`class-${opt}`}
+                label={opt}
+                name="class-checkbox-group"
+                onChange={() => {
+                  const newValue = toggleValueByKey(`${opt}`)
+                  onChange(newValue)
+                }}
+                value={opt}
+              />
+            </div>
+          )
+        })}
+      </div>
+    )
+    console.log(error);
+  }
+  
   return (
     <div className="w-100 ph3 ph5-m ph2-xl mw9 mt4">  {/* Resumen de reviews */}
       <div className={"f6 w-100 mw8 center"}>
+        <FilterBar
+          alwaysVisibleFilters={['product', 'approved']}
+          statements={statements}
+          onChangeStatements={(statements_:any) => filtrar(statements_)}
+          clearAllFiltersButtonLabel="Clear Filters"
+          options={{
+            product: {
+              label: 'Product',
+              renderFilterLabel: (st:any) => {
+                if (!st || !st.object) {
+                  // you should treat empty object cases only for alwaysVisibleFilters
+                  return 'Any'
+                }
+                return `${
+                  st.verb === '='
+                    ? 'is'
+                    : st.verb === '!='
+                    ? 'is not'
+                    : 'contains '
+                } ${st.object}`
+              },
+              verbs: [
+                /*{
+                  label: 'contains',
+                  value: 'contains',
+                  object: (props:any) => <SimpleInputObject {...props} />,
+                },*/
+                {
+                  label: 'is',
+                  value: '=',
+                  object: (props:any) => <SimpleInputObject {...props} />,
+                }/*,
+                {
+                  label: 'is not',
+                  value: '!=',
+                  object: (props:any) => <SimpleInputObject {...props} />,
+                },*/
+              ],
+            },
+            approved: {
+              label: 'Approved',
+              renderFilterLabel: (st:any) => {
+                if (!st || !st.object) {
+                  // you should treat empty object cases only for alwaysVisibleFilters
+                  return 'All'
+                }
+                
+                //const keys = st.object ? Object.keys(st.object) : {}
+                //return 'All'// Esta linea hay que borrarla
+                
+                const isAllTrue = st.object["approved"] && st.object["not approved"]
+                const isAllFalse = !st.object["approved"] && !st.object["not approved"]
+               
+                //const trueKeys = keys.each(key => st.object[key])
+                const trueKeys = [];
+                if(st.object["approved"]){
+                  trueKeys.push("approved");
+                }
+                if(st.object["not approved"]){
+                  trueKeys.push("not approved");
+                }
+                
+                
+                let trueKeysLabel = '';
+
+                trueKeys.forEach((key:any, index:any) => {
+                  trueKeysLabel += `${key}${
+                    index === trueKeys.length - 1 ? '' : ', '
+                  }`
+                })
+                return `${
+                  isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`
+                }`
+              },
+              verbs: [
+                {
+                  label: 'includes',
+                  value: 'includes',
+                  object: (props:any) => <ApprovedSelectorObject {...props} />,
+                },
+              ],
+            }
+          }}
+        />
+
         <Table
           fullWidth
           schema={defaultSchema}
@@ -307,55 +394,26 @@ const AdminReviews: VtexFunctionComponent = (props: any) => {
             textOf: 'of',
             totalItems: itemsLength,
           }}
-          filters={{
-            alwaysVisibleFilters: ['approved', 'locale'],
-            statements: filterStatements,
-            onChangeStatements: handleFiltersChange,
-            clearAllFiltersButtonLabel: 'Clear Filters',
-            collapseLeft: true,
-            options: {
-              approved: {
-                label: 'Aprobado',
-                renderFilterLabel: (st:any) => {
-                  if (!st || !st.object) {
-                    // you should treat empty object cases only for alwaysVisibleFilters
-                    console.log(st);
-                    return 'All'
-                  }
-                  const keys = st.object ? Object.keys(st.object) : {}
-                  console.log(keys);
-                  /*const isAllTrue = !keys.some((key: React.ReactText) => !st.object[key])
-                  const isAllFalse = !keys.some(key => st.object[key])
-                  const trueKeys = keys.filter(key => st.object[key])
-                  let trueKeysLabel = ''
-                  trueKeys.forEach((key:any, index:any) => {
-                    trueKeysLabel += `${key}${
-                      index === trueKeys.length - 1 ? '' : ', '
-                    }`
-                  })
-                  return `${
-                    isAllTrue ? 'All' : isAllFalse ? 'None' : `${trueKeysLabel}`
-                  }`*/
-                  return 'All' 
-                },
-                verbs: [
-                  {
-                    label: 'includes',
-                    value: 'includes',
-                    object: approvedSelectorObject,
-                  },
-                ],
-              },
-              locale: {
-                label: 'Locale',
-                ...simpleInputVerbsAndLabel(),
-              },
-            },
-          }}
         />
       </div>
     </div>
   )
 }
 
-export default graphql(adminReviewsQuery)(withRuntimeContext(AdminReviews))
+//export default graphql(adminReviewsQuery)(withRuntimeContext(AdminReviews))
+
+
+export default graphql(adminReviewsQuery, {
+  options: (props:any) => {
+    console.log("LOAD")
+    console.log(props)
+    return ({ variables: { 
+      productId: (props.query && props.query.productId) ? props.query.productId : undefined, 
+      //from: (props.query && props.query.from) ? props.query.from : 0 , 
+      //to:  (props.query && props.query.to) ? props.query.to : 99,
+      //locale: (props.query && props.query.locale) ? props.query.locale : '', 
+      approved: (props.query && props.query.approved) ? props.query.approved : '', 
+      notapproved: (props.query && props.query.notapproved) ? props.query.notapproved : '', 
+    }})
+  }
+})(withRuntimeContext(AdminReviews))
