@@ -13,7 +13,7 @@
     "react-intl": "^2.7.2",
     "react-rating": "^1.7.2",
     "font-awesome": "^4.7.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.19"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",
